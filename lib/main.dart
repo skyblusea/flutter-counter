@@ -15,6 +15,13 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   int counter = 0;
+  bool showAppBar = true;
+
+  void toggleAppBar() {
+    setState(() {
+      showAppBar = !showAppBar;
+    });
+  }
 
   void onClick() {
     setState(() {
@@ -25,7 +32,18 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
+              fontSize: 50, fontWeight: FontWeight.bold, color: Colors.red),
+        ),
+      ),
       home: Scaffold(
+        appBar: showAppBar
+            ? AppBar(
+                title: const CounterAppBar(),
+              )
+            : null,
         body: Center(
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
@@ -38,8 +56,16 @@ class _AppState extends State<App> {
               ),
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                const Text('toggle AppBar'),
+                IconButton(
+                    onPressed: toggleAppBar,
+                    icon: Icon(
+                        showAppBar ? Icons.visibility : Icons.visibility_off,
+                        size: 50)),
+                const SizedBox(
+                  height: 200,
+                ),
                 const Text('Click Count', style: TextStyle(fontSize: 30)),
                 Text('$counter', style: const TextStyle(fontSize: 50)),
                 IconButton(
@@ -51,5 +77,20 @@ class _AppState extends State<App> {
         ),
       ),
     );
+  }
+}
+
+class CounterAppBar extends StatelessWidget {
+  const CounterAppBar({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('Let\'s count!!',
+        style: TextStyle(
+          fontSize: 30,
+          color: Theme.of(context).textTheme.titleLarge!.color,
+        ));
   }
 }
